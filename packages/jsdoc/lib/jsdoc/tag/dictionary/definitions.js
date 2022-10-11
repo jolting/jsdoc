@@ -413,7 +413,7 @@ let baseTags = (exports.baseTags = {
   enum: {
     canHaveType: true,
     onTagged(doclet, tag) {
-      doclet.kind = doclet.kind || 'member';
+      doclet.kind = 'member';
       doclet.isEnum = true;
       setDocletTypeToValueType(doclet, tag);
     },

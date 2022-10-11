@@ -1,8 +1,13 @@
 define(function () {
     /**
-     * @exports mymodule
+     * A module called mymodule
+     * @module mymodule
+     */
+
+    /**
+     * An example enum.
      * @enum {string}
-      */
+     */
     var exports = {
         A: 'abc'
     };

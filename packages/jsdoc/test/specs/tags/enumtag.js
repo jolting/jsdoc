@@ -56,12 +56,35 @@ describe('@enum tag', () => {
     });
   });
 
-  describe('combined with @exports tag', () => {
+  describe('combined with @module tag', () => {
     const docSet3 = jsdoc.getDocSetFromFile('test/fixtures/enumtag3.js');
-    const mymodule = docSet3.getByLongname('module:mymodule')[0];
+    const mymodules = docSet3.getByLongname('module:mymodule');
+    const mymodulesA = docSet3.getByLongname('module:mymodule.A');
 
-    it('When a symbol has both an @exports tag and an @enum tag, its kind is set to `module`', () => {
-      expect(mymodule.kind).toBe('module');
+    it('When default export has @enum tag, there should be a member symbol and module symbol', () => {
+      const members = mymodules.filter((mymodule) => mymodule.kind === 'member');
+      const modules = mymodules.filter((mymodule) => mymodule.kind === 'module');
+      expect(members).toBeArrayOfSize(1);
+      expect(modules).toBeArrayOfSize(1);
+      expect(mymodulesA).toBeArrayOfSize(1);
+
+      const member = members[0];
+      expect(member.memberof).toBe('module:mymodule');
+      expect(member.isEnum).toBe(true);
+      expect(member.scope).toBeUndefined();
+
+      const module = modules[0];
+      expect(module.memberof).toBeUndefined();
+      expect(module.name).toBe('mymodule');
+      expect(module.scope).toBeUndefined();
+      expect(module.isEnum).toBeUndefined();
+
+      const mymoduleA = mymodulesA[0];
+      expect(mymoduleA.memberof).toBe('module:mymodule');
+      expect(mymoduleA.name).toBe('A');
+      expect(mymoduleA.isEnum).toBeUndefined();
+      expect(mymoduleA.scope).toBe('static');
+      expect(mymoduleA.defaultvalue).toBe('abc');
     });
   });
 });
